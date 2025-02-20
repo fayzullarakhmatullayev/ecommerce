@@ -1,23 +1,15 @@
 import { Box, Flex, VStack, Text, Link as ChakraLink } from '@chakra-ui/react';
-import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context';
-import { useEffect } from 'react';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 
 export const AdminLayout = () => {
   const location = useLocation();
-  const { user } = useAuth();
-  const navigate = useNavigate();
+
   const navItems = [
+    { path: '/admin/dashboard', label: 'Dashboard' },
     { path: '/admin/products', label: 'Products' },
     { path: '/admin/categories', label: 'Categories' },
     { path: '/admin/orders', label: 'Orders' }
   ];
-
-  useEffect(() => {
-    if (!user || !user?.isAdmin) {
-      navigate('/');
-    }
-  }, [user, navigate]);
 
   return (
     <Flex minH="calc(100vh - 72px)">

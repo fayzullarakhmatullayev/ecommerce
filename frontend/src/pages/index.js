@@ -13,5 +13,6 @@ export { AdminCategoryCreate } from './admin/AdminCategoryCreate';
 export { AdminCategoryEdit } from './admin/AdminCategoryEdit';
 export { AdminOrderList } from './admin/AdminOrderList';
 export { AdminOrderDetail } from './admin/AdminOrderDetail';
+export { AdminDashboard } from './admin/AdminDashboard';
 export { OrderList } from './OrderList';
 export { OrderDetail } from './OrderDetail';

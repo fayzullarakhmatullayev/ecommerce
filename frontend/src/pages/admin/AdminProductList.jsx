@@ -21,7 +21,9 @@ import {
   IconButton,
   Select,
   ButtonGroup,
-  Text
+  Text,
+  Badge,
+  VStack
 } from '@chakra-ui/react';
 import { EditIcon, DeleteIcon, AddIcon } from '@chakra-ui/icons';
 import { STORAGE_URL } from '../../constants';
@@ -74,7 +76,7 @@ export const AdminProductList = () => {
   const handlePageSizeChange = (event) => {
     const newPageSize = parseInt(event.target.value);
     setPageSize(newPageSize);
-    setCurrentPage(1); // Reset to first page when changing page size
+    setCurrentPage(1);
   };
 
   if (authLoading)
@@ -87,64 +89,98 @@ export const AdminProductList = () => {
 
   return (
     <Container maxW="container.xl" py={8}>
-      <Flex justify="space-between" align="center" mb={6}>
-        <Heading size="lg">Products Management</Heading>
-        <Button
-          as={Link}
-          to="/admin/products/new"
-          colorScheme="blue"
-          leftIcon={<AddIcon />}
-          size="md"
-        >
-          Add New Product
-        </Button>
-      </Flex>
-
-      <Box bg="white" shadow="md" borderRadius="lg" overflow="hidden">
-        <Flex px={4} py={2} align="center" justify="flex-end">
-          <HStack spacing={2}>
-            <Text>Items per page:</Text>
-            <Select value={pageSize} onChange={handlePageSizeChange} w="100px">
-              <option value="10">10</option>
-              <option value="20">20</option>
-              <option value="50">50</option>
-            </Select>
-          </HStack>
+      <Box bg="white" p={6} shadow="lg" borderRadius="xl" borderWidth="1px" borderColor="gray.100">
+        <Flex justify="space-between" align="center" mb={6}>
+          <Heading size="lg" color="gray.800">
+            Products Management
+          </Heading>
+          <Button
+            as={Link}
+            to="/admin/products/new"
+            colorScheme="blue"
+            leftIcon={<AddIcon />}
+            size="md"
+            px={6}
+            _hover={{
+              transform: 'translateY(-2px)',
+              boxShadow: 'md'
+            }}
+            transition="all 0.2s"
+          >
+            Add New Product
+          </Button>
         </Flex>
 
         <Box overflowX="auto">
+          <Flex px={4} py={2} align="center" justify="flex-end" mb={4}>
+            <HStack spacing={2}>
+              <Text fontWeight="medium">Items per page:</Text>
+              <Select
+                value={pageSize}
+                onChange={handlePageSizeChange}
+                w="100px"
+                size="sm"
+                borderRadius="md"
+                boxShadow="sm"
+              >
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+              </Select>
+            </HStack>
+          </Flex>
+
           <Table variant="simple">
-            <Thead>
+            <Thead bg="gray.50">
               <Tr>
-                <Th>Image</Th>
-                <Th>Title</Th>
-                <Th>Price</Th>
-                <Th>Category</Th>
-                <Th>Actions</Th>
+                <Th py={4}>Product</Th>
+                <Th py={4}>Price</Th>
+                <Th py={4}>Category</Th>
+                <Th py={4} width="150px">
+                  Actions
+                </Th>
               </Tr>
             </Thead>
             <Tbody>
               {products.map((product) => (
-                <Tr key={product.id}>
-                  <Td>
-                    <Image
-                      src={
-                        Array.isArray(product.images)
-                          ? STORAGE_URL + product.images[0]?.url
-                          : product.image
-                      }
-                      alt={product.title}
-                      boxSize="50px"
-                      objectFit="contain"
-                      borderRadius="md"
-                    />
+                <Tr key={product.id} _hover={{ bg: 'gray.50' }} transition="all 0.2s">
+                  <Td py={4}>
+                    <HStack spacing={4}>
+                      {product.images?.[0] && (
+                        <Box
+                          width="60px"
+                          height="60px"
+                          borderRadius="lg"
+                          overflow="hidden"
+                          boxShadow="sm"
+                        >
+                          <Image
+                            src={STORAGE_URL + product.images[0].url}
+                            alt={product.title}
+                            width="100%"
+                            height="100%"
+                            objectFit="cover"
+                          />
+                        </Box>
+                      )}
+                      <VStack align="start" spacing={1}>
+                        <Text fontWeight="semibold" color="gray.700">
+                          {product.title}
+                        </Text>
+                      </VStack>
+                    </HStack>
                   </Td>
-                  <Td maxW="300px" isTruncated>
-                    {product.title}
+                  <Td py={4}>
+                    <Badge colorScheme="green" fontSize="md" px={3} py={1} borderRadius="full">
+                      ${product.price.toFixed(2)}
+                    </Badge>
                   </Td>
-                  <Td>${product.price.toFixed(2)}</Td>
-                  <Td>{product.category?.name}</Td>
-                  <Td>
+                  <Td py={4}>
+                    <Badge colorScheme="blue" borderRadius="full" px={3} py={1} fontSize="sm">
+                      {product.category.name}
+                    </Badge>
+                  </Td>
+                  <Td py={4}>
                     <HStack spacing={2}>
                       <IconButton
                         as={Link}
@@ -154,7 +190,11 @@ export const AdminProductList = () => {
                         variant="ghost"
                         size="sm"
                         aria-label="Edit product"
-                        _hover={{ color: 'blue.500', bg: 'blue.100' }}
+                        _hover={{
+                          transform: 'scale(1.1)',
+                          bg: 'blue.50'
+                        }}
+                        transition="all 0.2s"
                       />
                       <IconButton
                         icon={<DeleteIcon />}
@@ -163,6 +203,11 @@ export const AdminProductList = () => {
                         size="sm"
                         onClick={() => handleDelete(product.id)}
                         aria-label="Delete product"
+                        _hover={{
+                          transform: 'scale(1.1)',
+                          bg: 'red.50'
+                        }}
+                        transition="all 0.2s"
                       />
                     </HStack>
                   </Td>
@@ -172,22 +217,34 @@ export const AdminProductList = () => {
           </Table>
         </Box>
 
-        <Flex px={4} py={4} align="center" justify="center">
+        <Flex px={4} py={6} align="center" justify="center">
           <ButtonGroup spacing={2}>
             <Button
               size="sm"
               onClick={() => handlePageChange(currentPage - 1)}
               isDisabled={currentPage === 1}
+              colorScheme="blue"
+              variant="outline"
+              _hover={{
+                transform: 'translateX(-2px)'
+              }}
+              transition="all 0.2s"
             >
               Previous
             </Button>
-            <Button size="sm" variant="outline">
+            <Button size="sm" variant="solid" colorScheme="blue">
               {currentPage} / {pagination.totalPages}
             </Button>
             <Button
               size="sm"
               onClick={() => handlePageChange(currentPage + 1)}
               isDisabled={currentPage === pagination.totalPages}
+              colorScheme="blue"
+              variant="outline"
+              _hover={{
+                transform: 'translateX(2px)'
+              }}
+              transition="all 0.2s"
             >
               Next
             </Button>

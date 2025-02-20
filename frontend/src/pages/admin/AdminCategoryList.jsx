@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { CategoryService } from '../../services/CategoryService';
 import { useAuth, useCategories } from '../../context';
@@ -18,22 +18,36 @@ import {
   Spinner,
   Flex,
   IconButton,
-  Text
+  Text,
+  Badge,
+  Select,
+  ButtonGroup
 } from '@chakra-ui/react';
 import { EditIcon, DeleteIcon, AddIcon } from '@chakra-ui/icons';
 
 export const AdminCategoryList = () => {
-  const { categories, loading: categoriesLoading, error: categoriesError, fetchCategories } = useCategories();
+  const {
+    categories,
+    loading: categoriesLoading,
+    error: categoriesError,
+    fetchCategories
+  } = useCategories();
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const toast = useToast();
+  const [pageSize, setPageSize] = useState(20);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages] = useState(1);
 
   useEffect(() => {
     if (!authLoading && !user?.isAdmin) {
       navigate('/login');
       return;
     }
-  }, [user, authLoading, navigate]);
+    if (user?.isAdmin) {
+      fetchCategories({ page: currentPage, limit: pageSize });
+    }
+  }, [user, authLoading, navigate, currentPage, pageSize]);
 
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this category?')) {
@@ -62,6 +76,16 @@ export const AdminCategoryList = () => {
     }
   };
 
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
+  const handlePageSizeChange = (event) => {
+    const newPageSize = parseInt(event.target.value);
+    setPageSize(newPageSize);
+    setCurrentPage(1);
+  };
+
   if (authLoading || categoriesLoading)
     return (
       <Flex height="80vh" align="center" justify="center">
@@ -75,20 +99,31 @@ export const AdminCategoryList = () => {
 
   return (
     <Container maxW="container.xl" py={8}>
-      <Flex justify="space-between" align="center" mb={6}>
-        <Heading size="lg">Categories Management</Heading>
-        <Button
-          as={Link}
-          to="/admin/categories/new"
-          colorScheme="blue"
-          leftIcon={<AddIcon />}
-          size="md"
-        >
-          Add New Category
-        </Button>
-      </Flex>
+      <Box bg="white" p={6} shadow="lg" borderRadius="xl" borderWidth="1px" borderColor="gray.100">
+        <Flex justify="space-between" align="center" mb={6}>
+          <Heading size="lg">Categories Management</Heading>
+          <Button
+            as={Link}
+            to="/admin/categories/new"
+            colorScheme="blue"
+            leftIcon={<AddIcon />}
+            size="md"
+          >
+            Add New Category
+          </Button>
+        </Flex>
 
-      <Box bg="white" shadow="md" borderRadius="lg" overflow="hidden">
+        <Flex px={4} py={2} align="center" justify="flex-end">
+          <HStack spacing={2}>
+            <Text>Items per page:</Text>
+            <Select value={pageSize} onChange={handlePageSizeChange} w="100px">
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+            </Select>
+          </HStack>
+        </Flex>
+
         <Box overflowX="auto">
           <Table variant="simple">
             <Thead>
@@ -100,9 +135,13 @@ export const AdminCategoryList = () => {
             </Thead>
             <Tbody>
               {categories.map((category) => (
-                <Tr key={category.id}>
-                  <Td>{category.name}</Td>
-                  <Td>{category._count?.products || 0}</Td>
+                <Tr key={category.id} _hover={{ bg: 'gray.50' }}>
+                  <Td fontWeight="medium">{category.name}</Td>
+                  <Td>
+                    <Badge colorScheme="blue" borderRadius="full" px={2}>
+                      {category._count?.products || 0}
+                    </Badge>
+                  </Td>
                   <Td>
                     <HStack spacing={2}>
                       <IconButton
@@ -122,6 +161,7 @@ export const AdminCategoryList = () => {
                         size="sm"
                         onClick={() => handleDelete(category.id)}
                         aria-label="Delete category"
+                        _hover={{ color: 'red.500', bg: 'red.100' }}
                       />
                     </HStack>
                   </Td>
@@ -130,6 +170,28 @@ export const AdminCategoryList = () => {
             </Tbody>
           </Table>
         </Box>
+
+        <Flex px={4} py={4} align="center" justify="center">
+          <ButtonGroup spacing={2}>
+            <Button
+              size="sm"
+              onClick={() => handlePageChange(currentPage - 1)}
+              isDisabled={currentPage === 1}
+            >
+              Previous
+            </Button>
+            <Button size="sm" variant="outline">
+              {currentPage} / {totalPages}
+            </Button>
+            <Button
+              size="sm"
+              onClick={() => handlePageChange(currentPage + 1)}
+              isDisabled={currentPage === totalPages}
+            >
+              Next
+            </Button>
+          </ButtonGroup>
+        </Flex>
       </Box>
     </Container>
   );

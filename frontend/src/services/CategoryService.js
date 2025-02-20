@@ -1,9 +1,11 @@
 import axios from '../axios';
 
 export class CategoryService {
-  static async getCategories() {
+  static async getCategories(page = 1, limit = 20) {
     try {
-      const response = await axios.get('/categories');
+      const response = await axios.get('/categories', {
+        params: { page, limit }
+      });
       return { success: true, data: response.data };
     } catch (error) {
       console.error('Error fetching categories:', error);

@@ -17,7 +17,8 @@ import {
   OrderList,
   OrderDetail,
   AdminOrderList,
-  AdminOrderDetail
+  AdminOrderDetail,
+  AdminDashboard
 } from './pages';
 
 import { NavBar, AdminLayout } from './components';
@@ -43,6 +44,7 @@ function App() {
             <Route path="/orders" element={<OrderList />} />
             <Route path="/orders/:id" element={<OrderDetail />} />
             <Route path="admin" element={<AdminLayout />}>
+              <Route path="dashboard" element={<AdminDashboard />} />
               <Route path="products" element={<AdminProductList />} />
               <Route path="products/new" element={<AdminProductCreate />} />
               <Route path="products/edit/:id" element={<AdminProductEdit />} />

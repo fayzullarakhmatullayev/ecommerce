@@ -62,7 +62,7 @@ export const NavBar = () => {
             </MenuButton>
             <MenuList color="gray.800">
               {user.isAdmin && (
-                <MenuItem as={Link} to="/admin/products" _hover={{ color: 'gray.800' }}>
+                <MenuItem as={Link} to="/admin/dashboard" _hover={{ color: 'gray.800' }}>
                   Admin Dashboard
                 </MenuItem>
               )}

@@ -5,6 +5,7 @@ A modern full-stack e-commerce application built with React and Node.js, featuri
 ## Features
 
 ### Customer Features
+
 - Browse products with category filtering
 - Image gallery for product viewing
 - Shopping cart management
@@ -13,6 +14,7 @@ A modern full-stack e-commerce application built with React and Node.js, featuri
 - Responsive design for mobile and desktop
 
 ### Admin Features
+
 - Product management (CRUD operations)
 - Category management
 - Order management with status updates
@@ -22,6 +24,7 @@ A modern full-stack e-commerce application built with React and Node.js, featuri
 ## Technology Stack
 
 ### Frontend
+
 - React 19 with Vite for fast development
 - Chakra UI for modern, accessible components
 - React Router DOM for navigation
@@ -32,12 +35,93 @@ A modern full-stack e-commerce application built with React and Node.js, featuri
 - Context API for state management
 
 ### Backend
+
 - Node.js with Express
 - Prisma ORM for database operations
 - JSON Web Token (JWT) for authentication
 - Multer for file uploads
 - CORS for cross-origin resource sharing
 - Input validation and sanitization
+
+## Installation
+
+### Prerequisites
+
+- Node.js (v16 or higher)
+- npm or yarn
+- PostgreSQL database
+
+### Environment Setup
+
+1. Clone the repository:
+
+```bash
+git clone <repository-url>
+cd e-commerce-app
+```
+
+2. Frontend setup:
+
+```bash
+cd frontend
+cp .env.example .env # Configure your environment variables
+npm install
+```
+
+3. Backend setup:
+
+```bash
+cd server
+cp .env.example .env # Configure your environment variables
+npm install
+```
+
+4. Database setup:
+
+```bash
+cd server
+npx prisma migrate dev
+npx prisma db seed
+```
+
+## Running the Application
+
+### Development Mode
+
+1. Start the backend server:
+
+```bash
+cd server
+npm run dev
+```
+
+2. Start the frontend development server:
+
+```bash
+cd frontend
+npm run dev
+```
+
+The application will be available at:
+
+- Frontend: http://localhost:5173
+- Backend API: http://localhost:3000
+
+### Production Mode
+
+1. Build the frontend:
+
+```bash
+cd frontend
+npm run build
+```
+
+2. Start the production server:
+
+```bash
+cd server
+npm start
+```
 
 ## Project Structure
 
@@ -50,93 +134,13 @@ A modern full-stack e-commerce application built with React and Node.js, featuri
 │   │   ├── services/    # API service layers
 │   │   └── hooks/       # Custom React hooks
 │   └── public/          # Static assets
-└── server/           # Express backend server
-    ├── routes/        # API route handlers
-    ├── middleware/    # Custom middleware
-    └── prisma/        # Database schema and migrations
+│
+├── server/           # Node.js backend application
+│   ├── prisma/        # Database schema and migrations
+│   ├── routes/        # API route handlers
+│   ├── middleware/    # Custom middleware
+│   └── storage/       # File upload directory
 ```
-
-## Getting Started
-
-### Prerequisites
-- Node.js (v16 or later)
-- npm or yarn
-- PostgreSQL database
-
-### Installation
-
-1. Clone the repository
-
-2. Frontend setup:
-```bash
-cd frontend
-npm install
-cp .env.example .env  # Configure environment variables
-```
-
-3. Backend setup:
-```bash
-cd server
-npm install
-cp .env.example .env  # Configure environment variables
-```
-
-4. Configure environment variables:
-   - Frontend `.env`:
-     ```
-     VITE_API_URL=http://localhost:3000
-     VITE_STORAGE_URL=http://localhost:3000/uploads/
-     ```
-   - Backend `.env`:
-     ```
-     PORT=3000
-     DATABASE_URL="postgresql://user:password@localhost:5432/dbname"
-     JWT_SECRET=your_jwt_secret
-     ```
-
-5. Initialize the database:
-```bash
-cd server
-npm run prisma:migrate  # Run database migrations
-npm run prisma:seed     # Seed initial data
-```
-
-### Running the Application
-
-1. Start the backend server:
-```bash
-cd server
-npm run dev  # Runs on http://localhost:3000
-```
-
-2. Start the frontend development server:
-```bash
-cd frontend
-npm run dev  # Runs on http://localhost:5173
-```
-
-## Available Scripts
-
-### Frontend
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint
-
-### Backend
-- `npm run dev` - Start development server with nodemon
-- `npm start` - Start production server
-- `npm run prisma:generate` - Generate Prisma client
-- `npm run prisma:migrate` - Run database migrations
-- `npm run prisma:seed` - Seed database with initial data
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
 
 ## License
 

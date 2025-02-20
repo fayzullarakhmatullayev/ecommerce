@@ -17,7 +17,7 @@ export class OrderService {
   }
 
   static async cancelOrder(id) {
-    const response = await axios.post(`/orders/${id}/cancel`);
+    const response = await axios.put(`/orders/${id}/cancel`);
     return response.data;
   }
 

@@ -99,7 +99,7 @@ export const AdminOrderDetail = () => {
   }
 
   return (
-    <Box p={4}>
+    <Box>
       <HStack justify="space-between" mb={6}>
         <Heading size="lg">Order Details #{order.id}</Heading>
         <Button onClick={() => navigate('/admin/orders')} variant="outline">

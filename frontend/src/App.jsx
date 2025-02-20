@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { useAuth } from './context';
+
 import {
   ProductList,
   ProductDetail,
@@ -25,7 +25,6 @@ import { NavBar, AdminLayout } from './components';
 import { Box } from '@chakra-ui/react';
 
 function App() {
-  const { user } = useAuth();
   return (
     <Router>
       <Box minH="100vh" width="100%" display="flex" flexDirection="column">
@@ -37,10 +36,7 @@ function App() {
             <Route path="/cart" element={<Cart />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route
-              path="/profile"
-              element={user ? <Profile /> : <Navigate to="/login" replace />}
-            />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/orders" element={<OrderList />} />
             <Route path="/orders/:id" element={<OrderDetail />} />
             <Route path="admin" element={<AdminLayout />}>

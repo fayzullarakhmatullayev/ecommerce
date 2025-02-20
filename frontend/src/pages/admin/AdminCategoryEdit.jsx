@@ -83,7 +83,7 @@ export const AdminCategoryEdit = () => {
   if (!user?.isAdmin) return null;
 
   return (
-    <Container maxW="container.xl" py={8}>
+    <Container maxW="container.xl">
       <Box as="form" onSubmit={handleSubmit}>
         <Flex justify="space-between" align="center" mb={6}>
           <Heading size="lg">Edit Category</Heading>

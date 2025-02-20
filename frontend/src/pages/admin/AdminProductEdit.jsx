@@ -55,6 +55,26 @@ export const AdminProductEdit = () => {
         const product = await getProductById(id);
         if (!product) throw new Error('Product not found');
 
+        // Helper function to safely parse JSON
+        const safeJSONParse = (str) => {
+          try {
+            return JSON.parse(str);
+          } catch {
+            return {
+              blocks: [
+                {
+                  type: 'paragraph',
+                  data: {
+                    text: str || ''
+                  }
+                }
+              ]
+            };
+          }
+        };
+
+        const parsedDescription = safeJSONParse(product?.description);
+
         setFormData({
           title: product.title,
           price: product.price.toString(),
@@ -76,7 +96,7 @@ export const AdminProductEdit = () => {
           const editorInstance = new EditorJS({
             holder: 'editorjs',
             placeholder: 'Enter product description...',
-            data: product.description ? JSON.parse(product.description) : {},
+            data: parsedDescription,
             tools: {
               header: {
                 class: Header,
@@ -253,7 +273,7 @@ export const AdminProductEdit = () => {
   if (!user?.isAdmin) return null;
 
   return (
-    <Container maxW="container.xl" py={8}>
+    <Container maxW="container.xl">
       <Box as="form" onSubmit={handleSubmit}>
         <Flex justify="space-between" align="center" mb={6}>
           <Heading size="lg">Edit Product</Heading>

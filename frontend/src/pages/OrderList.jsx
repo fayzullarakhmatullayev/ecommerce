@@ -14,6 +14,7 @@ import {
   Badge
 } from '@chakra-ui/react';
 import { useAuth } from '../context';
+import { ArrowBackIcon } from '@chakra-ui/icons';
 
 export const OrderList = () => {
   const [orders, setOrders] = useState([]);
@@ -68,8 +69,20 @@ export const OrderList = () => {
   };
 
   return (
-    <Box maxW="container.xl" mx="auto" px={4} py={8}>
-      <Heading as="h1" size="xl" mb={6}>
+    <Box maxW="container.xl" mx="auto" position="relative" px={4} py={8}>
+      <Button
+        onClick={() => navigate('/')}
+        leftIcon={<ArrowBackIcon />}
+        variant="ghost"
+        colorScheme="blue"
+        _hover={{ bg: 'blue.50' }}
+        transition="all 0.2s"
+        position="absolute"
+        left={0}
+      >
+        Back to Products
+      </Button>
+      <Heading as="h1" size="xl" mb={6} textAlign="center">
         My Orders
       </Heading>
       {loading && (

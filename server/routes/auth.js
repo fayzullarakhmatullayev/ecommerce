@@ -210,8 +210,44 @@ router.put('/change-password', authMiddleware, async (req, res) => {
 // Delete user account
 router.delete('/profile', authMiddleware, async (req, res) => {
   try {
-    await prisma.user.delete({
-      where: { id: req.userId }
+    // Delete all related records in a transaction
+    await prisma.$transaction(async (tx) => {
+      // Delete cart items first
+      await tx.cartItem.deleteMany({
+        where: {
+          cart: {
+            userId: req.userId
+          }
+        }
+      });
+
+      // Delete cart
+      await tx.cart.deleteMany({
+        where: {
+          userId: req.userId
+        }
+      });
+
+      // Delete order items
+      await tx.orderItem.deleteMany({
+        where: {
+          order: {
+            userId: req.userId
+          }
+        }
+      });
+
+      // Delete orders
+      await tx.order.deleteMany({
+        where: {
+          userId: req.userId
+        }
+      });
+
+      // Finally, delete the user
+      await tx.user.delete({
+        where: { id: req.userId }
+      });
     });
 
     res.status(200).json({ message: 'Account deleted successfully' });

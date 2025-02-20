@@ -139,9 +139,9 @@ export const AdminOrderList = () => {
   if (!user?.isAdmin) return null;
 
   return (
-    <Container maxW="container.xl" py={8}>
+    <Container maxW="container.xl">
       <Box bg="white" p={6} shadow="lg" borderRadius="xl" borderWidth="1px" borderColor="gray.100">
-        <Heading size="lg" mb={6} color="gray.800">
+        <Heading size="lg" mb={6} color="gray.800" textAlign="center">
           Orders Management
         </Heading>
         <Box overflowX="auto">

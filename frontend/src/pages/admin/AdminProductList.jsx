@@ -88,7 +88,7 @@ export const AdminProductList = () => {
   if (!user?.isAdmin) return null;
 
   return (
-    <Container maxW="container.xl" py={8}>
+    <Container maxW="container.xl">
       <Box bg="white" p={6} shadow="lg" borderRadius="xl" borderWidth="1px" borderColor="gray.100">
         <Flex justify="space-between" align="center" mb={6}>
           <Heading size="lg" color="gray.800">

@@ -27,22 +27,31 @@ export const FilterSidebar = ({
 }) => {
   return (
     <Box
-      w="250px"
+      w="280px"
       position="sticky"
       top="100px"
       alignSelf="flex-start"
       borderWidth="1px"
-      borderRadius="lg"
-      p={4}
+      borderRadius="xl"
+      p={6}
       bg="white"
-      shadow="sm"
+      shadow="md"
+      _hover={{ shadow: 'lg' }}
+      transition="all 0.2s"
     >
-      <VStack spacing={4} align="stretch">
+      <VStack spacing={6} align="stretch">
         <Box>
-          <Text fontWeight="bold" mb={2}>
+          <Text fontSize="lg" fontWeight="semibold" mb={3} color="gray.700">
             Category
           </Text>
-          <Select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
+          <Select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            bg="gray.50"
+            _hover={{ bg: 'gray.100' }}
+            transition="all 0.2s"
+            borderRadius="md"
+          >
             <option value="all">All Categories</option>
             {(categories || []).map((category) => (
               <option key={category.id} value={category.id}>
@@ -53,36 +62,38 @@ export const FilterSidebar = ({
         </Box>
 
         <Box>
-          <Text fontWeight="bold" mb={2}>
+          <Text fontSize="lg" fontWeight="semibold" mb={3} color="gray.700">
             Price Range
           </Text>
-          <Text fontSize="sm" mb={2}>
+          <Text fontSize="md" mb={4} color="blue.600" fontWeight="medium">
             ${priceRange[0]} - ${priceRange[1]}
           </Text>
-          <VStack spacing={4}>
+          <VStack spacing={6}>
             <RangeSlider
               aria-label={['min', 'max']}
               value={priceRange}
               onChange={setPriceRange}
               min={MIN_PRICE}
               max={MAX_PRICE}
+              colorScheme="blue"
             >
-              <RangeSliderTrack>
+              <RangeSliderTrack bg="blue.100">
                 <RangeSliderFilledTrack />
               </RangeSliderTrack>
-              <RangeSliderThumb index={0} />
-              <RangeSliderThumb index={1} />
+              <RangeSliderThumb index={0} boxSize={6} shadow="md" />
+              <RangeSliderThumb index={1} boxSize={6} shadow="md" />
             </RangeSlider>
 
-            <HStack spacing={2}>
+            <HStack spacing={4}>
               <NumberInput
-                size="sm"
+                size="md"
                 value={priceRange[0]}
                 onChange={(value) => setPriceRange([Number(value), priceRange[1]])}
                 min={0}
                 max={priceRange[1]}
+                borderRadius="md"
               >
-                <NumberInputField />
+                <NumberInputField bg="gray.50" />
                 <NumberInputStepper>
                   <NumberIncrementStepper />
                   <NumberDecrementStepper />
@@ -90,13 +101,14 @@ export const FilterSidebar = ({
               </NumberInput>
 
               <NumberInput
-                size="sm"
+                size="md"
                 value={priceRange[1]}
                 onChange={(value) => setPriceRange([priceRange[0], Number(value)])}
                 min={priceRange[0]}
                 max={MAX_PRICE}
+                borderRadius="md"
               >
-                <NumberInputField />
+                <NumberInputField bg="gray.50" />
                 <NumberInputStepper>
                   <NumberIncrementStepper />
                   <NumberDecrementStepper />
@@ -107,12 +119,17 @@ export const FilterSidebar = ({
         </Box>
 
         <Button
-          colorScheme="gray"
-          size="sm"
+          colorScheme="blue"
+          size="md"
           onClick={() => {
             setSelectedCategory('all');
             setPriceRange([MIN_PRICE, MAX_PRICE]);
           }}
+          mt={2}
+          w="full"
+          variant="outline"
+          _hover={{ bg: 'blue.50' }}
+          transition="all 0.2s"
         >
           Reset Filters
         </Button>

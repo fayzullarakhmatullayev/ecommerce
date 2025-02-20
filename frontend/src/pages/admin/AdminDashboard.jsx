@@ -64,7 +64,7 @@ export const AdminDashboard = () => {
   }, []);
 
   return (
-    <Box p={6} bg="gray.50" minH="100vh">
+    <Box bg="gray.50" minH="100vh">
       <Heading mb={8} color="gray.700">
         Dashboard Overview
       </Heading>

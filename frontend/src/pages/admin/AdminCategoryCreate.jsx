@@ -67,16 +67,11 @@ export const AdminCategoryCreate = () => {
   if (!user?.isAdmin) return null;
 
   return (
-    <Container maxW="container.xl" py={8}>
+    <Container maxW="container.xl">
       <Box as="form" onSubmit={handleSubmit}>
         <Flex justify="space-between" align="center" mb={6}>
           <Heading size="lg">Create New Category</Heading>
-          <Button
-            type="submit"
-            colorScheme="blue"
-            isLoading={isSubmitting}
-            loadingText="Creating"
-          >
+          <Button type="submit" colorScheme="blue" isLoading={isSubmitting} loadingText="Creating">
             Create Category
           </Button>
         </Flex>

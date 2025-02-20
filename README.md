@@ -1,75 +1,104 @@
 # E-commerce Application
 
-A modern full-stack e-commerce application built with React and Node.js.
+A modern full-stack e-commerce application built with React and Node.js, featuring a responsive UI, secure authentication, and comprehensive admin management capabilities.
 
 ## Features
 
-- Product catalog with categories
+### Customer Features
+- Browse products with category filtering
 - Image gallery for product viewing
-- User authentication
-- File upload functionality
-- RESTful API backend
-- Database integration with Prisma
+- Shopping cart management
+- Order placement and tracking
+- User authentication and profile management
+- Responsive design for mobile and desktop
+
+### Admin Features
+- Product management (CRUD operations)
+- Category management
+- Order management with status updates
+- Image upload and management
+- Admin dashboard with analytics
 
 ## Technology Stack
 
 ### Frontend
-- React 19
-- Vite
-- Chakra UI
-- React Router DOM
-- Axios
-- React Image Gallery
-- Swiper
-- Editor.js
+- React 19 with Vite for fast development
+- Chakra UI for modern, accessible components
+- React Router DOM for navigation
+- Axios for API requests
+- React Image Gallery for product images
+- Swiper for carousels
+- Editor.js for rich text editing
+- Context API for state management
 
 ### Backend
-- Node.js
-- Express
-- Prisma ORM
-- JSON Web Token (JWT)
+- Node.js with Express
+- Prisma ORM for database operations
+- JSON Web Token (JWT) for authentication
 - Multer for file uploads
-- CORS
+- CORS for cross-origin resource sharing
+- Input validation and sanitization
 
 ## Project Structure
 
 ```
-├── frontend/     # React frontend application
-└── server/       # Express backend server
+├── frontend/          # React frontend application
+│   ├── src/
+│   │   ├── components/  # Reusable UI components
+│   │   ├── pages/       # Page components
+│   │   ├── context/     # React Context providers
+│   │   ├── services/    # API service layers
+│   │   └── hooks/       # Custom React hooks
+│   └── public/          # Static assets
+└── server/           # Express backend server
+    ├── routes/        # API route handlers
+    ├── middleware/    # Custom middleware
+    └── prisma/        # Database schema and migrations
 ```
 
 ## Getting Started
 
 ### Prerequisites
-- Node.js (Latest LTS version)
+- Node.js (v16 or later)
 - npm or yarn
-- A running database instance
+- PostgreSQL database
 
 ### Installation
 
 1. Clone the repository
 
-2. Install frontend dependencies:
+2. Frontend setup:
 ```bash
 cd frontend
 npm install
+cp .env.example .env  # Configure environment variables
 ```
 
-3. Install backend dependencies:
+3. Backend setup:
 ```bash
 cd server
 npm install
+cp .env.example .env  # Configure environment variables
 ```
 
-4. Set up environment variables:
-- Create `.env` file in the server directory
-- Configure your database connection and other environment variables
+4. Configure environment variables:
+   - Frontend `.env`:
+     ```
+     VITE_API_URL=http://localhost:3000
+     VITE_STORAGE_URL=http://localhost:3000/uploads/
+     ```
+   - Backend `.env`:
+     ```
+     PORT=3000
+     DATABASE_URL="postgresql://user:password@localhost:5432/dbname"
+     JWT_SECRET=your_jwt_secret
+     ```
 
 5. Initialize the database:
 ```bash
 cd server
-npm run prisma:migrate
-npm run prisma:seed
+npm run prisma:migrate  # Run database migrations
+npm run prisma:seed     # Seed initial data
 ```
 
 ### Running the Application
@@ -77,13 +106,13 @@ npm run prisma:seed
 1. Start the backend server:
 ```bash
 cd server
-npm run dev
+npm run dev  # Runs on http://localhost:3000
 ```
 
 2. Start the frontend development server:
 ```bash
 cd frontend
-npm run dev
+npm run dev  # Runs on http://localhost:5173
 ```
 
 ## Available Scripts
@@ -99,13 +128,16 @@ npm run dev
 - `npm start` - Start production server
 - `npm run prisma:generate` - Generate Prisma client
 - `npm run prisma:migrate` - Run database migrations
-- `npm run prisma:seed` - Seed the database
-- `npm run prisma:studio` - Open Prisma Studio
+- `npm run prisma:seed` - Seed database with initial data
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License - see the LICENSE file for details.

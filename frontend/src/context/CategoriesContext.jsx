@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import axios from '../axios';
 import PropTypes from 'prop-types';
+import { CategoryService } from '../services/CategoryService';
 
 const CategoriesContext = createContext();
 
@@ -12,7 +12,7 @@ export const CategoriesProvider = ({ children }) => {
   const fetchCategories = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('/categories');
+      const response = await CategoryService.getCategories();
       setCategories(response.data);
       setError(null);
     } catch {

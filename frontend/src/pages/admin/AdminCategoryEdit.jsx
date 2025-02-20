@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from '../../axios';
+import { CategoryService } from '../../services/CategoryService';
 import { useAuth, useCategories } from '../../context';
 import {
   Box,
@@ -54,15 +54,19 @@ export const AdminCategoryEdit = () => {
 
     setIsSubmitting(true);
     try {
-      await axios.put(`/categories/${id}`, { name });
-      await fetchCategories();
-      toast({
-        title: 'Category updated successfully',
-        status: 'success',
-        duration: 2000,
-        isClosable: true
-      });
-      navigate('/admin/categories');
+      const { success, error } = await CategoryService.updateCategory(id, name);
+      if (success) {
+        await fetchCategories();
+        toast({
+          title: 'Category updated successfully',
+          status: 'success',
+          duration: 2000,
+          isClosable: true
+        });
+        navigate('/admin/categories');
+      } else {
+        throw new Error(error);
+      }
     } catch (error) {
       toast({
         title: 'Error updating category',

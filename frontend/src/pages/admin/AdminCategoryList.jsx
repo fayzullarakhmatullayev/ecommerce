@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from '../../axios';
+import { CategoryService } from '../../services/CategoryService';
 import { useAuth, useCategories } from '../../context';
 import {
   Box,
@@ -23,7 +23,7 @@ import {
 import { EditIcon, DeleteIcon, AddIcon } from '@chakra-ui/icons';
 
 export const AdminCategoryList = () => {
-  const { categories, loading: categoriesLoading, error: categoriesError } = useCategories();
+  const { categories, loading: categoriesLoading, error: categoriesError, fetchCategories } = useCategories();
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const toast = useToast();
@@ -38,17 +38,22 @@ export const AdminCategoryList = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this category?')) {
       try {
-        await axios.delete(`/categories/${id}`);
-        toast({
-          title: 'Category deleted',
-          status: 'success',
-          duration: 2000,
-          isClosable: true
-        });
+        const { success, error } = await CategoryService.deleteCategory(id);
+        if (success) {
+          await fetchCategories();
+          toast({
+            title: 'Category deleted',
+            status: 'success',
+            duration: 2000,
+            isClosable: true
+          });
+        } else {
+          throw new Error(error);
+        }
       } catch (error) {
         toast({
           title: 'Error deleting category',
-          description: error.response?.data?.message || 'Something went wrong',
+          description: error.message || 'Something went wrong',
           status: 'error',
           duration: 2000,
           isClosable: true

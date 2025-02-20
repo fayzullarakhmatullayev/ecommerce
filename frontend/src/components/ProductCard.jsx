@@ -6,8 +6,10 @@ import { Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { STORAGE_URL } from '../constants';
+import { useAuth } from '../context';
 
 export const ProductCard = ({ product, onAddToCart }) => {
+  const { user } = useAuth();
   return (
     <VStack
       borderWidth="1px"
@@ -67,9 +69,11 @@ export const ProductCard = ({ product, onAddToCart }) => {
         </Link>
         <Text>${product.price.toFixed(2)}</Text>
       </VStack>
-      <Button colorScheme="blue" onClick={() => onAddToCart(product)}>
-        Add to Cart
-      </Button>
+      {user && !user.isAdmin && (
+        <Button colorScheme="blue" onClick={() => onAddToCart(product)}>
+          Add to Cart
+        </Button>
+      )}
     </VStack>
   );
 };

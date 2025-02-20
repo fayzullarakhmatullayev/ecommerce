@@ -37,12 +37,15 @@ export const ProductList = () => {
   const [totalPages, setTotalPages] = useState(1);
 
   const debouncedFetchProducts = useCallback(
-    useDebounce((filters) => {
-      fetchProducts(filters).then((data) => {
+    useDebounce(async (filters) => {
+      try {
+        const data = await fetchProducts(filters);
         setTotalPages(data.pagination.totalPages);
-      });
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
     }, 300),
-    [fetchProducts]
+    []
   );
 
   const fetchFilteredProducts = useCallback(() => {
@@ -62,7 +65,15 @@ export const ProductList = () => {
       limit: pageSize
     });
     debouncedFetchProducts(filters);
-  }, [selectedCategory, searchQuery, priceRange, currentPage, pageSize, setQueryParams]);
+  }, [
+    selectedCategory,
+    searchQuery,
+    priceRange,
+    currentPage,
+    pageSize,
+    setQueryParams,
+    debouncedFetchProducts
+  ]);
 
   useEffect(() => {
     fetchFilteredProducts();
@@ -74,12 +85,6 @@ export const ProductList = () => {
     setCurrentPage(1); // Reset to first page when changing page size
   };
 
-  if (productsLoading || categoriesLoading)
-    return (
-      <Flex height="80vh" align="center" justify="center">
-        <Spinner size="xl" />
-      </Flex>
-    );
   if (productsError || categoriesError)
     return <Text color="red.500">{productsError || categoriesError}</Text>;
 
@@ -106,8 +111,13 @@ export const ProductList = () => {
         />
 
         <Box flex={1}>
-          <SimpleGrid columns={[1, 2, 3]} spacing={6}>
-            {products.length === 0 ? (
+          <SimpleGrid position="relative" columns={[1, 2, 3]} spacing={6}>
+            {(productsLoading || categoriesLoading) && (
+              <Flex height="60vh" align="center" minW="100%" position="absolute" justify="center">
+                <Spinner size="xl" />
+              </Flex>
+            )}
+            {products.length === 0 && !productsLoading ? (
               <Box gridColumn="1/-1" textAlign="center" py={10}>
                 <Text fontSize="xl" color="gray.600">
                   No products found matching your filters

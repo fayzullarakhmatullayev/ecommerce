@@ -75,8 +75,10 @@ export const Cart = () => {
             >
               <HStack spacing={6}>
                 <Image
-                  src={Array.isArray(item.images) && STORAGE_URL + item.images[0]?.url}
-                  alt={item.title}
+                  src={item.product.images && item.product.images.length > 0
+                    ? STORAGE_URL + item.product.images[0].url
+                    : ''}
+                  alt={item.product.title}
                   boxSize="120px"
                   objectFit="contain"
                   bg="white"
@@ -85,10 +87,10 @@ export const Cart = () => {
                 />
                 <VStack flex={1} align="start" spacing={3}>
                   <Text fontSize="lg" fontWeight="bold" noOfLines={2}>
-                    {item.title}
+                    {item.product.title}
                   </Text>
                   <Text fontSize="lg" color="blue.600" fontWeight="semibold">
-                    ${(item.price * item.quantity).toFixed(2)}
+                    ${(item.product.price * item.quantity).toFixed(2)}
                   </Text>
                   <HStack spacing={4}>
                     <IconButton

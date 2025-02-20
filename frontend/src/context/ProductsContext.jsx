@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from 'react';
-import axios from '../axios';
 import PropTypes from 'prop-types';
+import { ProductService } from '../services/ProductService';
 
 const ProductsContext = createContext();
 
@@ -33,14 +33,14 @@ export const ProductsProvider = ({ children }) => {
       }
       params.append('page', page);
 
-      const response = await axios.get('/products', { params });
-      setProducts(response.data.products);
+      const data = await ProductService.fetchProducts(params);
+      setProducts(data.products);
       setPagination({
-        currentPage: response.data.pagination.currentPage,
-        totalPages: response.data.pagination.totalPages
+        currentPage: data.pagination.currentPage,
+        totalPages: data.pagination.totalPages
       });
       setError(null);
-      return response.data;
+      return data;
     } catch {
       setError('Failed to fetch products');
       setProducts([]);
@@ -53,9 +53,9 @@ export const ProductsProvider = ({ children }) => {
   const getProductById = async (id) => {
     try {
       setLoading(true);
-      const response = await axios.get(`/products/${id}`);
+      const data = await ProductService.getProductById(id);
       setError(null);
-      return response.data;
+      return data;
     } catch {
       setError('Failed to fetch product');
       return null;

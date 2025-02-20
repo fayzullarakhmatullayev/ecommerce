@@ -16,6 +16,7 @@ import {
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { useAuth } from '../context';
 import { useNavigate, Link } from 'react-router-dom';
+import { authService } from '../services/AuthService';
 
 export const Register = () => {
   const [name, setName] = useState('');
@@ -24,7 +25,7 @@ export const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { register, user } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const toast = useToast();
 
@@ -48,7 +49,7 @@ export const Register = () => {
 
     setIsLoading(true);
     try {
-      const success = await register(email, password, name);
+      const { success } = await authService.register(email, password, name);
       if (success) {
         toast({
           title: 'Registration successful',
@@ -57,6 +58,7 @@ export const Register = () => {
           isClosable: true
         });
         navigate('/');
+        window.location.reload();
       } else {
         toast({
           title: 'Registration failed',

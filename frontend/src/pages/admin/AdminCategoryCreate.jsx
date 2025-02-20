@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from '../../axios';
+import { CategoryService } from '../../services/CategoryService';
 import { useAuth, useCategories } from '../../context';
 import {
   Box,
@@ -38,15 +38,19 @@ export const AdminCategoryCreate = () => {
 
     setIsSubmitting(true);
     try {
-      await axios.post('/categories', { name });
-      await fetchCategories();
-      toast({
-        title: 'Category created successfully',
-        status: 'success',
-        duration: 2000,
-        isClosable: true
-      });
-      navigate('/admin/categories');
+      const { success, error } = await CategoryService.createCategory(name);
+      if (success) {
+        await fetchCategories();
+        toast({
+          title: 'Category created successfully',
+          status: 'success',
+          duration: 2000,
+          isClosable: true
+        });
+        navigate('/admin/categories');
+      } else {
+        throw new Error(error);
+      }
     } catch (error) {
       toast({
         title: 'Error creating category',

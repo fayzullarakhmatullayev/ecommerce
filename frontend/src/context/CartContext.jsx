@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
 import { createContext, useContext, useState, useEffect } from 'react';
+import { useAuth } from './AuthContext';
+import { CartService } from '../services/CartService';
 
 const CartContext = createContext();
 
@@ -15,50 +17,66 @@ export const CartProvider = ({ children }) => {
   CartProvider.propTypes = {
     children: PropTypes.node.isRequired
   };
-  const [cart, setCart] = useState(() => {
-    const savedCart = localStorage.getItem('cart');
-    return savedCart ? JSON.parse(savedCart) : [];
-  });
+  const { user } = useAuth();
+  const [cart, setCart] = useState({ items: [] });
 
   useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(cart));
-  }, [cart]);
-
-  const addToCart = (product) => {
-    setCart((currentCart) => {
-      const existingItem = currentCart.find((item) => item.id === product.id);
-      if (existingItem) {
-        return currentCart.map((item) =>
-          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
-        );
+    const fetchCart = async () => {
+      if (user && !user.isAdmin) {
+        try {
+          const cartData = await CartService.getCart();
+          setCart(cartData);
+        } catch (error) {
+          console.error('Error fetching cart:', error);
+        }
       }
-      return [...currentCart, { ...product, quantity: 1 }];
-    });
+    };
+
+    fetchCart();
+  }, [user]);
+
+  const addToCart = async (product) => {
+    if (!user || user.isAdmin) return;
+    try {
+      const updatedCart = await CartService.addToCart(product.id, 1);
+      setCart(updatedCart);
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+    }
   };
 
-  const removeFromCart = (productId) => {
-    setCart((currentCart) => currentCart.filter((item) => item.id !== productId));
+  const removeFromCart = async (itemId) => {
+    if (!user || user.isAdmin) return;
+    try {
+      const updatedCart = await CartService.removeFromCart(itemId);
+      setCart(updatedCart);
+    } catch (error) {
+      console.error('Error removing from cart:', error);
+    }
   };
 
-  const updateQuantity = (productId, quantity) => {
-    if (quantity < 1) return;
-    setCart((currentCart) =>
-      currentCart.map((item) => (item.id === productId ? { ...item, quantity } : item))
-    );
+  const updateQuantity = async (itemId, quantity) => {
+    if (!user || user.isAdmin || quantity < 1) return;
+    try {
+      const updatedCart = await CartService.updateQuantity(itemId, quantity);
+      setCart(updatedCart);
+    } catch (error) {
+      console.error('Error updating quantity:', error);
+    }
   };
 
   const clearCart = () => {
-    setCart([]);
+    setCart({ items: [] });
   };
 
   const getCartTotal = () => {
-    return cart.reduce((total, item) => total + item.price * item.quantity, 0);
+    return cart.items.reduce((total, item) => total + item.product.price * item.quantity, 0);
   };
 
   return (
     <CartContext.Provider
       value={{
-        cart,
+        cart: cart.items,
         addToCart,
         removeFromCart,
         updateQuantity,

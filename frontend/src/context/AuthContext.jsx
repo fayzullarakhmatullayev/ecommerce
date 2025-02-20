@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { authService } from '../services/AuthService';
 import axios from '../axios';
 
 const AuthContext = createContext();
@@ -18,10 +19,9 @@ export const AuthProvider = ({ children }) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = authService.getToken();
     if (token) {
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      // Verify token and get user data
       checkAuth();
     } else {
       setLoading(false);
@@ -30,62 +30,23 @@ export const AuthProvider = ({ children }) => {
 
   const checkAuth = async () => {
     try {
-      const response = await axios.get('/auth/me');
-      const userData = response.data;
-      // Ensure isAdmin property is properly set from the response
-      setUser({
-        ...userData,
-        isAdmin: Boolean(userData.isAdmin)
-      });
-      setError(null);
-    } catch {
-      localStorage.removeItem('token');
-      delete axios.defaults.headers.common['Authorization'];
-      setError('Authentication failed');
-      setUser(null);
+      const { success, user: userData, error } = await authService.getCurrentUserProfile();
+      if (success) {
+        setUser(userData);
+        setError(null);
+      } else {
+        authService.logout();
+        delete axios.defaults.headers.common['Authorization'];
+        setError(error);
+        setUser(null);
+      }
     } finally {
       setLoading(false);
     }
   };
 
-  const login = async (email, password) => {
-    try {
-      const response = await axios.post('/auth/login', { email, password });
-      const { token, user: userData } = response.data;
-      localStorage.setItem('token', token);
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      setUser({
-        ...userData,
-        isAdmin: Boolean(userData.isAdmin)
-      });
-      setError(null);
-      return true;
-    } catch (err) {
-      setError(err.response?.data?.message || 'Login failed');
-      return false;
-    }
-  };
-
-  const register = async (email, password, name) => {
-    try {
-      const response = await axios.post('/auth/register', { email, password, name });
-      const { token, user: userData } = response.data;
-      localStorage.setItem('token', token);
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      setUser({
-        ...userData,
-        isAdmin: Boolean(userData.isAdmin)
-      });
-      setError(null);
-      return true;
-    } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed');
-      return false;
-    }
-  };
-
   const logout = () => {
-    localStorage.removeItem('token');
+    authService.logout();
     delete axios.defaults.headers.common['Authorization'];
     setUser(null);
   };
@@ -96,8 +57,6 @@ export const AuthProvider = ({ children }) => {
         user,
         loading,
         error,
-        login,
-        register,
         logout
       }}
     >

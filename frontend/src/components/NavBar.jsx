@@ -17,7 +17,8 @@ import { useCart, useAuth } from '../context';
 export const NavBar = () => {
   const { cart } = useCart();
   const { user, logout } = useAuth();
-  const cartItemsCount = cart.reduce((total, item) => total + item.quantity, 0);
+  const cartItemsCount = cart ? cart.reduce((total, item) => total + item.quantity, 0) : 0;
+  const showCartFeatures = user && !user.isAdmin;
 
   return (
     <Box width="100%" bg="blue.500" position="sticky" top={0} zIndex={1000}>
@@ -28,24 +29,26 @@ export const NavBar = () => {
           </Text>
         </Link>
         <Spacer />
-        <Link to="/cart">
-          <Button colorScheme="whiteAlpha" position="relative" mr={4}>
-            Cart
-            {cartItemsCount > 0 && (
-              <Badge
-                colorScheme="red"
-                position="absolute"
-                top="-2"
-                right="-2"
-                borderRadius="full"
-                fontSize="xs"
-                px={2}
-              >
-                {cartItemsCount}
-              </Badge>
-            )}
-          </Button>
-        </Link>
+        {showCartFeatures && (
+          <Link to="/cart">
+            <Button colorScheme="whiteAlpha" position="relative" mr={4}>
+              Cart
+              {cartItemsCount > 0 && (
+                <Badge
+                  colorScheme="red"
+                  position="absolute"
+                  top="-2"
+                  right="-2"
+                  borderRadius="full"
+                  fontSize="xs"
+                  px={2}
+                >
+                  {cartItemsCount}
+                </Badge>
+              )}
+            </Button>
+          </Link>
+        )}
 
         {user ? (
           <Menu>

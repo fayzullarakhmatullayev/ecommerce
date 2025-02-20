@@ -16,13 +16,14 @@ import {
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { useAuth } from '../context';
 import { useNavigate, Link } from 'react-router-dom';
+import { authService } from '../services/AuthService';
 
 export const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { login, user } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const toast = useToast();
 
@@ -37,7 +38,7 @@ export const Login = () => {
     setIsLoading(true);
 
     try {
-      const success = await login(email, password);
+      const { success } = await authService.login(email, password);
       if (success) {
         toast({
           title: 'Login successful',
@@ -46,6 +47,7 @@ export const Login = () => {
           isClosable: true
         });
         navigate('/');
+        window.location.reload();
       } else {
         toast({
           title: 'Login failed',

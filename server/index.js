@@ -5,6 +5,7 @@ import productsRouter from './routes/products.js';
 import categoriesRouter from './routes/categories.js';
 import authRouter from './routes/auth.js';
 import uploadRouter from './routes/upload.js';
+import cartRoutes from './routes/cart.js';
 
 // Load environment variables
 dotenv.config();
@@ -25,6 +26,7 @@ app.use('/api/products', productsRouter);
 app.use('/api/categories', categoriesRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/upload', uploadRouter);
+app.use('/api/cart', cartRoutes);
 
 // Basic health check route
 app.get('/api/health', (req, res) => {

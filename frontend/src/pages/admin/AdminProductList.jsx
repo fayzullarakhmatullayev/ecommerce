@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from '../../axios';
 import { useProducts, useAuth } from '../../context';
+import { ProductService } from '../../services/ProductService';
 import {
   Box,
   Button,
@@ -47,7 +47,7 @@ export const AdminProductList = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       try {
-        await axios.delete(`/products/${id}`);
+        await ProductService.deleteProduct(id);
         fetchProducts({ page: currentPage, limit: pageSize });
         toast({
           title: 'Product deleted',
@@ -55,9 +55,10 @@ export const AdminProductList = () => {
           duration: 2000,
           isClosable: true
         });
-      } catch {
+      } catch (error) {
         toast({
           title: 'Error deleting product',
+          description: error.message || 'Something went wrong',
           status: 'error',
           duration: 2000,
           isClosable: true

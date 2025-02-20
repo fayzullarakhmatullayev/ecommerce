@@ -16,8 +16,7 @@ import {
   Image,
   SimpleGrid,
   IconButton,
-  Flex,
-  Spinner
+  Flex
 } from '@chakra-ui/react';
 import { DeleteIcon, AddIcon } from '@chakra-ui/icons';
 import EditorJS from '@editorjs/editorjs';
@@ -44,7 +43,6 @@ export const AdminProductEdit = () => {
   const [existingImages, setExistingImages] = useState([]);
   const [editor, setEditor] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (!authLoading && !user?.isAdmin) {
@@ -110,7 +108,6 @@ export const AdminProductEdit = () => {
           });
 
           setEditor(editorInstance);
-          setIsLoading(false);
         }, 100);
       } catch (error) {
         toast({
@@ -137,7 +134,7 @@ export const AdminProductEdit = () => {
         URL.revokeObjectURL(image.preview);
       });
     };
-  }, [user, authLoading, navigate, id, getProductById, imageFiles]);
+  }, [user, authLoading, navigate, id, imageFiles]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -254,12 +251,6 @@ export const AdminProductEdit = () => {
   };
 
   if (!user?.isAdmin) return null;
-  if (isLoading)
-    return (
-      <Flex height="80vh" align="center" justify="center">
-        <Spinner size="xl" />
-      </Flex>
-    );
 
   return (
     <Container maxW="container.xl" py={8}>

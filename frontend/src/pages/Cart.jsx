@@ -14,6 +14,7 @@ import { AddIcon, MinusIcon, DeleteIcon } from '@chakra-ui/icons';
 import { useCart } from '../context';
 import confetti from 'canvas-confetti';
 import { Link } from 'react-router-dom';
+import { STORAGE_URL } from '../constants';
 
 export const Cart = () => {
   const { cart, removeFromCart, updateQuantity, clearCart, getCartTotal } = useCart();
@@ -74,7 +75,7 @@ export const Cart = () => {
             >
               <HStack spacing={6}>
                 <Image
-                  src={Array.isArray(item.images) ? item.images[0]?.url : item.image}
+                  src={Array.isArray(item.images) && STORAGE_URL + item.images[0]?.url}
                   alt={item.title}
                   boxSize="120px"
                   objectFit="contain"

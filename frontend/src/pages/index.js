@@ -8,3 +8,6 @@ export { ProductDetail } from './ProductDetail';
 export { AdminProductList } from './admin/AdminProductList';
 export { AdminProductCreate } from './admin/AdminProductCreate';
 export { AdminProductEdit } from './admin/AdminProductEdit';
+export { AdminCategoryList } from './admin/AdminCategoryList';
+export { AdminCategoryCreate } from './admin/AdminCategoryCreate';
+export { AdminCategoryEdit } from './admin/AdminCategoryEdit';

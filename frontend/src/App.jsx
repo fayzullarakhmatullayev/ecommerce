@@ -10,7 +10,10 @@ import {
   AdminProductList,
   NotFound,
   AdminProductCreate,
-  AdminProductEdit
+  AdminProductEdit,
+  AdminCategoryList,
+  AdminCategoryCreate,
+  AdminCategoryEdit
 } from './pages';
 
 import { NavBar, AdminLayout } from './components';
@@ -33,11 +36,13 @@ function App() {
               path="/profile"
               element={user ? <Profile /> : <Navigate to="/login" replace />}
             />
-            <Route path="/admin" element={<AdminLayout />}>
+            <Route path="admin" element={<AdminLayout />}>
               <Route path="products" element={<AdminProductList />} />
               <Route path="products/new" element={<AdminProductCreate />} />
               <Route path="products/edit/:id" element={<AdminProductEdit />} />
-              <Route path="categories" element={<div>Categories Page</div>} />
+              <Route path="categories" element={<AdminCategoryList />} />
+              <Route path="categories/new" element={<AdminCategoryCreate />} />
+              <Route path="categories/edit/:id" element={<AdminCategoryEdit />} />
               <Route path="orders" element={<div>Orders Page</div>} />
               <Route index element={<Navigate to="products" replace />} />
             </Route>

@@ -42,11 +42,6 @@ export const AdminProductCreate = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    if (!authLoading && !user?.isAdmin) {
-      navigate('/login');
-      return;
-    }
-
     // Initialize Editor.js with a small delay to ensure DOM is ready
     setTimeout(() => {
       const editorInstance = new EditorJS({

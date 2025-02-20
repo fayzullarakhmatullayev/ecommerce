@@ -19,8 +19,10 @@ export const CartProvider = ({ children }) => {
   };
   const { user } = useAuth();
   const [cart, setCart] = useState({ items: [] });
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     const fetchCart = async () => {
       if (user && !user.isAdmin) {
         try {
@@ -28,6 +30,8 @@ export const CartProvider = ({ children }) => {
           setCart(cartData);
         } catch (error) {
           console.error('Error fetching cart:', error);
+        } finally {
+          setLoading(false);
         }
       }
     };
@@ -81,7 +85,8 @@ export const CartProvider = ({ children }) => {
         removeFromCart,
         updateQuantity,
         clearCart,
-        getCartTotal
+        getCartTotal,
+        loading
       }}
     >
       {children}

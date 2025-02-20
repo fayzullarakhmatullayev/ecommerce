@@ -3,8 +3,8 @@ import axios from '../axios';
 const TOKEN_KEY = 'token';
 const USER_KEY = 'user';
 
-export const authService = {
-  login: async (email, password) => {
+export class authService {
+  static async login(email, password) {
     try {
       const response = await axios.post('/auth/login', { email, password });
       const { token, user } = response.data;
@@ -17,9 +17,9 @@ export const authService = {
       console.error('Login error:', error);
       return { success: false, error: error.response?.data?.message || 'Login failed' };
     }
-  },
+  }
 
-  register: async (email, password, name) => {
+  static async register(email, password, name) {
     try {
       const response = await axios.post('/auth/register', { email, password, name });
       const { token, user } = response.data;
@@ -33,27 +33,27 @@ export const authService = {
       console.error('Registration error:', error);
       return { success: false, error: error.response?.data?.message || 'Registration failed' };
     }
-  },
+  }
 
-  logout: () => {
+  static logout() {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
-  },
+  }
 
-  getCurrentUser: () => {
+  static getCurrentUser() {
     const userStr = localStorage.getItem(USER_KEY);
     return userStr ? JSON.parse(userStr) : null;
-  },
+  }
 
-  getToken: () => {
+  static getToken() {
     return localStorage.getItem(TOKEN_KEY);
-  },
+  }
 
-  isAuthenticated: () => {
+  static isAuthenticated() {
     return !!localStorage.getItem(TOKEN_KEY);
-  },
+  }
 
-  getCurrentUserProfile: async () => {
+  static async getCurrentUserProfile() {
     try {
       const response = await axios.get('/auth/me');
       const userData = response.data;
@@ -66,4 +66,4 @@ export const authService = {
       };
     }
   }
-};
+}

@@ -13,7 +13,11 @@ import {
   AdminProductEdit,
   AdminCategoryList,
   AdminCategoryCreate,
-  AdminCategoryEdit
+  AdminCategoryEdit,
+  OrderList,
+  OrderDetail,
+  AdminOrderList,
+  AdminOrderDetail
 } from './pages';
 
 import { NavBar, AdminLayout } from './components';
@@ -36,6 +40,8 @@ function App() {
               path="/profile"
               element={user ? <Profile /> : <Navigate to="/login" replace />}
             />
+            <Route path="/orders" element={<OrderList />} />
+            <Route path="/orders/:id" element={<OrderDetail />} />
             <Route path="admin" element={<AdminLayout />}>
               <Route path="products" element={<AdminProductList />} />
               <Route path="products/new" element={<AdminProductCreate />} />
@@ -43,7 +49,8 @@ function App() {
               <Route path="categories" element={<AdminCategoryList />} />
               <Route path="categories/new" element={<AdminCategoryCreate />} />
               <Route path="categories/edit/:id" element={<AdminCategoryEdit />} />
-              <Route path="orders" element={<div>Orders Page</div>} />
+              <Route path="orders" element={<AdminOrderList />} />
+              <Route path="orders/:id" element={<AdminOrderDetail />} />
               <Route index element={<Navigate to="products" replace />} />
             </Route>
             <Route path="*" element={<NotFound />} />

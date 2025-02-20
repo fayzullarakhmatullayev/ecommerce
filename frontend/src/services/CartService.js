@@ -1,23 +1,23 @@
 import axios from '../axios';
 
-export const CartService = {
-  getCart: async () => {
+export class CartService {
+  static async getCart() {
     const response = await axios.get('/cart');
     return response.data;
-  },
+  }
 
-  addToCart: async (productId, quantity) => {
+  static async addToCart(productId, quantity) {
     const response = await axios.post('/cart', { productId, quantity });
     return response.data;
-  },
+  }
 
-  updateQuantity: async (itemId, quantity) => {
+  static async updateQuantity(itemId, quantity) {
     const response = await axios.put(`/cart/${itemId}`, { quantity });
     return response.data;
-  },
+  }
 
-  removeFromCart: async (itemId) => {
+  static async removeFromCart(itemId) {
     const response = await axios.delete(`/cart/${itemId}`);
     return response.data;
   }
-};
+}

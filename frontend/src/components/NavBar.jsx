@@ -66,6 +66,12 @@ export const NavBar = () => {
                   Admin Dashboard
                 </MenuItem>
               )}
+              {!user.isAdmin && (
+                <MenuItem as={Link} to="/orders" _hover={{ color: 'gray.800' }}>
+                  Orders
+                </MenuItem>
+              )}
+
               <MenuItem as={Link} to="/profile" _hover={{ color: 'gray.800' }}>
                 Profile
               </MenuItem>

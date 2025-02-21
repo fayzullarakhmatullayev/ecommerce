@@ -6,13 +6,13 @@ export const AdminLayout = () => {
 
   const navItems = [
     { path: '/admin/dashboard', label: 'Dashboard' },
+    { path: '/admin/orders', label: 'Orders' },
     { path: '/admin/products', label: 'Products' },
-    { path: '/admin/categories', label: 'Categories' },
-    { path: '/admin/orders', label: 'Orders' }
+    { path: '/admin/categories', label: 'Categories' }
   ];
 
   return (
-    <Flex minH="calc(100vh - 72px)">
+    <Flex minH="calc(100vh - 64px)">
       <Box
         w="250px"
         bg="white"
@@ -20,8 +20,8 @@ export const AdminLayout = () => {
         py={8}
         px={4}
         position="sticky"
-        top="72px"
-        h="calc(100vh - 72px)"
+        top="64px"
+        h="calc(100vh - 64px)"
         borderRightWidth="1px"
         borderRightColor="gray.200"
         shadow="md"

@@ -37,15 +37,15 @@ model Category {
 }
 
 model Product {
-  id          Int           @id @default(autoincrement())
+  id          Int            @id @default(autoincrement())
   title       String
   description String
   price       Float
   images      ProductImage[]
   categoryId  Int
-  category    Category      @relation(fields: [categoryId], references: [id])
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  category    Category       @relation(fields: [categoryId], references: [id])
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
   cartItems   CartItem[]
   orderItems  OrderItem[]
 }

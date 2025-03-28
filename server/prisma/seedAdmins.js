@@ -7,7 +7,7 @@ async function main() {
   try {
     // Clear existing admins
     await prisma.admin.deleteMany();
-    
+
     // Create admin users
     const admins = [
       {
@@ -21,13 +21,13 @@ async function main() {
         password: await bcrypt.hash('manager123', 10)
       }
     ];
-    
+
     for (const adminData of admins) {
       await prisma.admin.create({
         data: adminData
       });
     }
-    
+
     console.log('Admin users seeded successfully');
   } catch (error) {
     console.error('Error seeding admin users:', error);

@@ -114,6 +114,14 @@ export const Login = () => {
           </Link>
         </Text>
       </VStack>
+
+      <Text mt={4} textAlign="center">
+        User: <b>mail@gmail.com</b> <b>123456</b>
+      </Text>
+
+      <Text textAlign="center">
+        Admin: <b>admin@example.com</b> <b>admin123</b>
+      </Text>
     </Box>
   );
 };
